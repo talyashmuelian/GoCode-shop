@@ -1,8 +1,34 @@
-const Header = ({ onFilter }) => {
+import { Slider } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { useState } from "react";
+const useStyles = makeStyles({
+  root: {
+    width: 300,
+  },
+});
+
+function valuetext(value) {
+  return `${value}°C`;
+}
+
+const Header = ({ categories, onFilter }) => {
+  const classes = useStyles();
+  const [value, setValue] = useState([20, 37]);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   return (
     <nav className="product-filter">
       <h1>Jackets</h1>
 
+      <Slider
+        value={value}
+        onChange={handleChange}
+        valueLabelDisplay="auto"
+        aria-labelledby="range-slider"
+        getAriaValueText={valuetext}
+      />
       <div className="sort">
         <div className="collection-sort">
           <label>Filter by:</label>
@@ -12,11 +38,11 @@ const Header = ({ onFilter }) => {
               onFilter(e.target.value);
             }}
           >
-            <option>All</option>
-            <option>jewelery</option>
-            <option>men's clothing</option>
-            <option>electronics</option>
-            <option>women's clothing</option>
+            {categories.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
           </select>
         </div>
 
