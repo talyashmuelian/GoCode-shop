@@ -11,6 +11,9 @@ const Cart = () => {
       </Button>
       <Drawer open={open}>
         <Button onClick={() => setOpen(false)}>X</Button>
+        <div>
+          <h2>My Cart:</h2>
+        </div>
         <List>
           {cartArr.map((item) => (
             <ListItem>

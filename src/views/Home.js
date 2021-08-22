@@ -10,8 +10,14 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import Toolbar from "@material-ui/core/Toolbar";
 import Cart from "../components/Cart";
-import CartContext from "../CartContext";
+import ProductsContext from "../ProductsContext";
+import { Slider } from "@material-ui/core";
 
+////////
+// function valuetext(value) {
+//   return `${value}°C`;
+// }
+///////
 let productsArr = [];
 const groupBy = (xs, key) =>
   xs.reduce((rv, x) => {
@@ -20,21 +26,56 @@ const groupBy = (xs, key) =>
   }, {});
 
 function Home() {
+  ////////
+  const [maxPrice, setMaxPrice] = useState();
+  const [minPrice, setMinPrice] = useState();
+  //the value for slider
+  const [value, setValue] = useState([]);
+
+  const handleChange = (event, newValue, category) => {
+    console.log("newValue", newValue);
+    setValue(newValue);
+    onFilterByPriceSlider(category);
+  };
+  /////////
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]); //= Object.keys(groupBy(productList, 'category'));
-  const [cartArr, setCartArr] = useState([
-    { title: "hi", price: 70, amount: 1 },
-    { title: "hi2", price: 30, amount: 2 },
-  ]);
-  const [open, setOpen] = useState(false);
+
   const onFilter = (category) => {
     if (category !== "All") {
       setProducts(
-        productsArr.filter((product) => product.category === category)
+        productsArr.filter(
+          (product) =>
+            product.price >= value[0] &&
+            product.price <= value[1] &&
+            product.category === category
+        )
       );
     } else {
-      setProducts(productsArr);
+      setProducts(
+        productsArr.filter(
+          (product) => product.price >= value[0] && product.price <= value[1]
+        )
+      );
+    }
+  };
+  const onFilterByPriceSlider = (category) => {
+    if (category !== "All") {
+      setProducts(
+        productsArr.filter(
+          (product) =>
+            product.price >= value[0] &&
+            product.price <= value[1] &&
+            product.category === category
+        )
+      );
+    } else {
+      setProducts(
+        productsArr.filter(
+          (product) => product.price >= value[0] && product.price <= value[1]
+        )
+      );
     }
   };
   useEffect(() => {
@@ -47,9 +88,25 @@ function Home() {
         productsArr = json;
         setCategories(["All", ...Object.keys(groupBy(json, "category"))]);
         setIsLoading(false);
+        const maxPriceInitial = Math.max.apply(
+          Math,
+          productsArr.map(function (o) {
+            return o.price;
+          })
+        );
+        setMaxPrice(Math.ceil(maxPriceInitial));
+        const minPriceInitial = Math.min.apply(
+          Math,
+          productsArr.map(function (o) {
+            return o.price;
+          })
+        );
+        setMinPrice(Math.floor(minPriceInitial));
+        setValue([Math.floor(minPriceInitial), Math.ceil(maxPriceInitial)]);
       });
     console.log("here");
   }, []);
+
   if (isLoading) {
     return (
       <div className="App">
@@ -58,14 +115,35 @@ function Home() {
     );
   } else {
     return (
-      <CartContext.Provider value={{ cartArr, setCartArr, open, setOpen }}>
-        <div className="App">
-          <Header categories={categories} onFilter={onFilter} />
-          <Cart />
-          <br /> <br /> <br /> <br />
-          <Products products={products} />
+      // <ProductsContext.Provider value={[1, 2]}>
+      <div className="App">
+        <Header
+          categories={categories}
+          onFilter={onFilter}
+          products={products}
+          handleChange={handleChange}
+          value={value}
+          minPrice={minPrice}
+          maxPrice={maxPrice}
+        />
+        {/* <div style={{ width: 300, margin: 30 }}>
+          {" "}
+          <Slider
+            max={Math.ceil(maxPrice)}
+            value={value}
+            onChange={handleChange}
+            valueLabelDisplay="auto"
+            aria-labelledby="range-slider"
+            getAriaValueText={valuetext}
+          />
         </div>
-      </CartContext.Provider>
+        <h1>{value[0]}</h1>
+        <h1>{value[1]}</h1> */}
+        <Cart />
+        <br /> <br /> <br /> <br />
+        <Products products={products} />
+      </div>
+      //</ProductsContext.Provider>
     );
   }
 }

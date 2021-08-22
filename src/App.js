@@ -17,19 +17,23 @@ import Home from "./views/Home";
 import ProductDetails from "./views/ProductDetails";
 
 function App() {
+  const [cartArr, setCartArr] = useState([]);
+  const [open, setOpen] = useState(false);
   return (
-    <Router>
-      <div className="App">
-        <Switch>
-          <Route path="/products/:id">
-            <ProductDetails />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </div>
-    </Router>
+    <CartContext.Provider value={{ cartArr, setCartArr, open, setOpen }}>
+      <Router>
+        <div className="App">
+          <Switch>
+            <Route path="/products/:id">
+              <ProductDetails />
+            </Route>
+            <Route path="/">
+              <Home />
+            </Route>
+          </Switch>
+        </div>
+      </Router>
+    </CartContext.Provider>
   );
 }
 

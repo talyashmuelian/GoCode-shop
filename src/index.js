@@ -5,6 +5,7 @@ import "./components/Header.css";
 import "./components/Products.css";
 import "./components/Product.css";
 import "./components/Loading.css";
+import "./components/Cart.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 

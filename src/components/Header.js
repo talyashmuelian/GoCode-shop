@@ -1,34 +1,63 @@
 import { Slider } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useState } from "react";
-const useStyles = makeStyles({
-  root: {
-    width: 300,
-  },
-});
+import { useContext, useState } from "react";
+import ProductsContext from "../ProductsContext";
 
 function valuetext(value) {
   return `${value}°C`;
 }
+const Header = ({
+  categories,
+  onFilter,
+  products,
+  handleChange,
+  value,
+  minPrice,
+  maxPrice,
+}) => {
+  console.log(products);
+  const [category, setCategory] = useState(null);
+  // let maxPrice = Math.max.apply(
+  //   Math,
+  //   products.map(function (o) {
+  //     return o.price;
+  //   })
+  // );
 
-const Header = ({ categories, onFilter }) => {
-  const classes = useStyles();
-  const [value, setValue] = useState([20, 37]);
+  // let minPrice = Math.min.apply(
+  //   Math,
+  //   products.map(function (o) {
+  //     return o.price;
+  //   })
+  // );
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  // const [value, setValue] = useState([
+  //   Math.floor(minPrice),
+  //   Math.ceil(maxPrice),
+  // ]);
+
+  // const handleChange = (event, newValue) => {
+  //   setValue(newValue);
+  // };
   return (
     <nav className="product-filter">
       <h1>Jackets</h1>
-
-      <Slider
-        value={value}
-        onChange={handleChange}
-        valueLabelDisplay="auto"
-        aria-labelledby="range-slider"
-        getAriaValueText={valuetext}
-      />
+      <div style={{ width: 300, margin: 30 }}>
+        {" "}
+        <Slider
+          min={Math.floor(minPrice)}
+          max={Math.ceil(maxPrice)}
+          value={value}
+          onChange={(e, value) => {
+            handleChange(e, value, category);
+          }}
+          valueLabelDisplay="auto"
+          aria-labelledby="range-slider"
+          getAriaValueText={valuetext}
+        />
+      </div>
+      <h1>{value[0]}</h1>
+      <h1>{value[1]}</h1>
       <div className="sort">
         <div className="collection-sort">
           <label>Filter by:</label>
@@ -36,6 +65,7 @@ const Header = ({ categories, onFilter }) => {
             onChange={(e) => {
               onFilter("All");
               onFilter(e.target.value);
+              setCategory(e.target.value);
             }}
           >
             {categories.map((option) => (

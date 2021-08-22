@@ -19,24 +19,36 @@ const Product = ({ id, image, title, price, description, category }) => {
       setCartArr(cartArr.filter((product) => product.title !== title));
       setCartArr((cartArr) => [
         ...cartArr,
-        { title: title, price: prevPrice + price, amount: prevAmount + 1 },
+        {
+          title: title,
+          price: Math.round((prevPrice + price) * 100) / 100,
+          amount: prevAmount + 1,
+        },
       ]);
     }
     setOpen(true);
   };
   const onRemove = () => {
-    let currentProduct = cartArr.find((p) => p.title === title);
-    let prevAmount = currentProduct.amount;
-    let prevPrice = currentProduct.price;
-    setCartArr(cartArr.filter((product) => product.title !== title));
-    setCartArr((cartArr) => [
-      ...cartArr,
-      { title: title, price: prevPrice - price, amount: prevAmount - 1 },
-    ]);
-    if (prevAmount === 1) {
+    if (!cartArr.some((p) => p.title === title)) {
+      setCartArr(cartArr);
+    } else {
+      let currentProduct = cartArr.find((p) => p.title === title);
+      let prevAmount = currentProduct.amount;
+      let prevPrice = currentProduct.price;
       setCartArr(cartArr.filter((product) => product.title !== title));
+      setCartArr((cartArr) => [
+        ...cartArr,
+        {
+          title: title,
+          price: Math.round((prevPrice - price) * 100) / 100,
+          amount: prevAmount - 1,
+        },
+      ]);
+      if (prevAmount === 1) {
+        setCartArr(cartArr.filter((product) => product.title !== title));
+      }
+      setOpen(true);
     }
-    setOpen(true);
   };
   return (
     <div className="product-card">
