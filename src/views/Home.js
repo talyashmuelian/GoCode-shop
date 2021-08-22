@@ -13,11 +13,6 @@ import Cart from "../components/Cart";
 import ProductsContext from "../ProductsContext";
 import { Slider } from "@material-ui/core";
 
-////////
-// function valuetext(value) {
-//   return `${value}°C`;
-// }
-///////
 let productsArr = [];
 const groupBy = (xs, key) =>
   xs.reduce((rv, x) => {
@@ -26,18 +21,16 @@ const groupBy = (xs, key) =>
   }, {});
 
 function Home() {
-  ////////
   const [maxPrice, setMaxPrice] = useState();
   const [minPrice, setMinPrice] = useState();
   //the value for slider
   const [value, setValue] = useState([]);
 
   const handleChange = (event, newValue, category) => {
-    console.log("newValue", newValue);
     setValue(newValue);
     onFilterByPriceSlider(category);
   };
-  /////////
+
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]); //= Object.keys(groupBy(productList, 'category'));
@@ -115,7 +108,6 @@ function Home() {
     );
   } else {
     return (
-      // <ProductsContext.Provider value={[1, 2]}>
       <div className="App">
         <Header
           categories={categories}
@@ -126,24 +118,10 @@ function Home() {
           minPrice={minPrice}
           maxPrice={maxPrice}
         />
-        {/* <div style={{ width: 300, margin: 30 }}>
-          {" "}
-          <Slider
-            max={Math.ceil(maxPrice)}
-            value={value}
-            onChange={handleChange}
-            valueLabelDisplay="auto"
-            aria-labelledby="range-slider"
-            getAriaValueText={valuetext}
-          />
-        </div>
-        <h1>{value[0]}</h1>
-        <h1>{value[1]}</h1> */}
         <Cart />
         <br /> <br /> <br /> <br />
         <Products products={products} />
       </div>
-      //</ProductsContext.Provider>
     );
   }
 }

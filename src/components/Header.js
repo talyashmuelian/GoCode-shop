@@ -15,30 +15,8 @@ const Header = ({
   minPrice,
   maxPrice,
 }) => {
-  console.log(products);
-  const [category, setCategory] = useState(null);
-  // let maxPrice = Math.max.apply(
-  //   Math,
-  //   products.map(function (o) {
-  //     return o.price;
-  //   })
-  // );
+  const [category, setCategory] = useState("All");
 
-  // let minPrice = Math.min.apply(
-  //   Math,
-  //   products.map(function (o) {
-  //     return o.price;
-  //   })
-  // );
-
-  // const [value, setValue] = useState([
-  //   Math.floor(minPrice),
-  //   Math.ceil(maxPrice),
-  // ]);
-
-  // const handleChange = (event, newValue) => {
-  //   setValue(newValue);
-  // };
   return (
     <nav className="product-filter">
       <h1>Jackets</h1>
